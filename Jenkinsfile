@@ -6,23 +6,7 @@ pipeline {
     }
 
     stages {
-
-        // Uncomment and configure the Git checkout stage if needed
-        // stage("Git Checkout") {  
-        //     steps {  
-        //         git branch: 'main', credentialsId: 'githubToken', url: 'https://github.com/nitin-996/Virtual-Browser.git'
-        //     }
-        // }
-
-        // Vulnerability check stage using Dependency Check plugin
-        // stage('Vulnerability Check') {
-        //     steps {
-        //         dependencyCheck additionalArguments: '--scan ./ --disableNodeAudit', 
-        //                         odcInstallation: 'DP'
-        //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-        //     }
-        // }
-
+        
         // SonarQube code quality analysis stage
         stage('SonarQube Analysis') {
             steps {
@@ -41,12 +25,12 @@ pipeline {
         stage('Docker build') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker_user') {  // Fixed closing of withDockerRegistry
+                    withDockerRegistry(credentialsId: 'docker_user') {  // No need for 'url' here for Docker Hub
                         dir('/var/lib/jenkins/workspace/virtual browser/.docker/firefox') {
                             sh 'docker build -t 007devopsimages/VB:latest .'
                             // Removed duplicate push command here
                         }
-                    }  // Correctly closing the withDockerRegistry block
+                    }
                 }
             }
         }
@@ -61,9 +45,9 @@ pipeline {
         // Docker push stage
         stage("Docker push") {
             steps {
-                withDockerRegistry(credentialsId: 'docker_user') {  // Fixed closing of withDockerRegistry
+                withDockerRegistry(credentialsId: 'docker_user') {  // No need for 'url' here for Docker Hub
                     sh "docker push 007devopsimages/VB:latest"
-                }  // Correctly closing the withDockerRegistry block
+                }
             }
         }
     }
