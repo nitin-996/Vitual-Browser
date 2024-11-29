@@ -1,33 +1,44 @@
 pipeline {
     agent any
 
-environment{
-    Scanner_Home = tool(sonarScanner)
-}
-    stages {
+    environment {
+        Scanner_Home = tool('sonarScanner')  // Ensure 'sonarScanner' is correctly configured in Jenkins
+    }
 
-        // btw parathesis bracket we git stage a name
-        stage('vulnerability check') {
+    stages {
+        // Vulnerability check stage using Dependency Check plugin
+        stage('Vulnerability Check') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableNodeAudit', odcInstallation: 'DP',
+                dependencyCheck additionalArguments: '--scan ./ --disableNodeAudit', 
+                                odcInstallation: 'DP'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-        stage('sonarqube') {
+
+        // SonarQube code quality analysis stage
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("sonarServer") {
- sh ''' $Scanner_Home/bin/sonarScanner -Dsonar.projectKey=VirtualBrowser \
- -Dsonar.projectName=VirtualBrowser '''
- }
+                withSonarQubeEnv('sonarServer') {  // Ensure 'sonarServer' is configured in Jenkins
+                    sh '''
+                        $Scanner_Home/bin/sonar-scanner \
+                        -Dsonar.projectKey=VirtualBrowser \
+                        -Dsonar.projectName=VirtualBrowser \
+                        -Dsonar.sources=.
+                    '''
+                }
             }
         }
-        stage('Docker stage') {
+
+        // Docker build and push stage
+        stage('Docker Stage') {
             steps {
-               script{
-                withDockerRegistry(credentialsId: 'docker_user' , toolName: 'Docker') {
-    // some block
-}
-               }
+                script {
+                    withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {
+                        // Docker build and push commands here
+                        sh 'docker build -t my-image:latest .'
+                        sh 'docker push my-image:latest'
+                    }
+                }
             }
         }
     }
