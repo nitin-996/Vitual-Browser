@@ -10,7 +10,7 @@ pipeline {
         // SonarQube code quality analysis stage
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarServer') {  // Ensure 'sonarServer' is configured in Jenkins
+                withSonarQubeEnv('SonarServer') {  // Ensure 'sonarServer' is configured in Jenkins
                     sh '''
                         $Scanner_Home/bin/sonar-scanner \
                         -Dsonar.projectKey=VirtualBrowser \
