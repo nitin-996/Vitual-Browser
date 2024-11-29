@@ -6,9 +6,10 @@ pipeline {
     }
 
     stages {
-        
-        // stage("Git Checkout") {  // Corrected stage name
-        //     steps {  // Missing 'steps' block
+
+        // Uncomment and configure the Git checkout stage if needed
+        // stage("Git Checkout") {  
+        //     steps {  
         //         git branch: 'main', credentialsId: 'githubToken', url: 'https://github.com/nitin-996/Virtual-Browser.git'
         //     }
         // }
@@ -40,29 +41,30 @@ pipeline {
         stage('Docker build') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker_user', ') {
+                    withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {  // Fixed closing of withDockerRegistry
                         dir('/var/lib/jenkins/workspace/virtual browser/.docker/firefox') {
                             sh 'docker build -t 007devopsimages/VB:latest .'
-                            sh 'docker push 007devopsimages/VB:latest'  // Corrected image name for push
+                            // Removed duplicate push command here
                         }
                     }
                 }
             }
         }
 
-        stage("trivy scan"){
-            steps{
+        // Trivy scan stage
+        stage("Trivy scan") {
+            steps {
                 sh "trivy image 007devopsimages/VB:latest >> trivy.txt"
             }
         }
 
-        stage("dicker push"){
-            steps{
-                withDockerRegistry(credentialsId: 'docker_user', ') {
+        // Docker push stage
+        stage("Docker push") {
+            steps {
+                withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {  // Fixed closing of withDockerRegistry
                     sh "docker push 007devopsimages/VB:latest"
-               }
+                }
             }
-
         }
     }
 }
