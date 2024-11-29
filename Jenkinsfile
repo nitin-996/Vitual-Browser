@@ -46,7 +46,7 @@ pipeline {
                             sh 'docker build -t 007devopsimages/VB:latest .'
                             // Removed duplicate push command here
                         }
-                    }
+                    }  // Correctly closing the withDockerRegistry block
                 }
             }
         }
@@ -63,7 +63,7 @@ pipeline {
             steps {
                 withDockerRegistry(credentialsId: 'docker_user') {  // Fixed closing of withDockerRegistry
                     sh "docker push 007devopsimages/VB:latest"
-                }
+                }  // Correctly closing the withDockerRegistry block
             }
         }
     }
