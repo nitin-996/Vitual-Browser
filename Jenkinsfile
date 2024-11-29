@@ -14,13 +14,13 @@ pipeline {
         // }
 
         // Vulnerability check stage using Dependency Check plugin
-        stage('Vulnerability Check') {
-            steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableNodeAudit', 
-                                odcInstallation: 'DP'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
+        // stage('Vulnerability Check') {
+        //     steps {
+        //         dependencyCheck additionalArguments: '--scan ./ --disableNodeAudit', 
+        //                         odcInstallation: 'DP'
+        //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        //     }
+        // }
 
         // SonarQube code quality analysis stage
         stage('SonarQube Analysis') {
@@ -37,7 +37,7 @@ pipeline {
         }
 
         // Docker build and push stage
-        stage('Docker Stage') {
+        stage('Docker build') {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {
@@ -48,6 +48,21 @@ pipeline {
                     }
                 }
             }
+        }
+
+        stage("trivy scan"){
+            step{
+                sh "trivy image 007devopsimages/VB:latest >> trivy.txt"
+            }
+        }
+
+        stage("dicker push"){
+            step{
+                withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {
+                    sh "docker push 007devopsimages/VB:latest"
+               }
+            }
+
         }
     }
 }
