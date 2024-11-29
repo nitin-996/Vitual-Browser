@@ -41,7 +41,7 @@ pipeline {
         stage('Docker build') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {  // Fixed closing of withDockerRegistry
+                    withDockerRegistry(credentialsId: 'docker_user') {  // Fixed closing of withDockerRegistry
                         dir('/var/lib/jenkins/workspace/virtual browser/.docker/firefox') {
                             sh 'docker build -t 007devopsimages/VB:latest .'
                             // Removed duplicate push command here
@@ -61,7 +61,7 @@ pipeline {
         // Docker push stage
         stage("Docker push") {
             steps {
-                withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {  // Fixed closing of withDockerRegistry
+                withDockerRegistry(credentialsId: 'docker_user') {  // Fixed closing of withDockerRegistry
                     sh "docker push 007devopsimages/VB:latest"
                 }
             }
