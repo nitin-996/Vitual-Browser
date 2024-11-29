@@ -40,7 +40,7 @@ pipeline {
         stage('Docker build') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {
+                    withDockerRegistry(credentialsId: 'docker_user', ') {
                         dir('/var/lib/jenkins/workspace/virtual browser/.docker/firefox') {
                             sh 'docker build -t 007devopsimages/VB:latest .'
                             sh 'docker push 007devopsimages/VB:latest'  // Corrected image name for push
@@ -58,7 +58,7 @@ pipeline {
 
         stage("dicker push"){
             steps{
-                withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {
+                withDockerRegistry(credentialsId: 'docker_user', ') {
                     sh "docker push 007devopsimages/VB:latest"
                }
             }
