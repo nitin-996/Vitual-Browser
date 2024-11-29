@@ -29,9 +29,6 @@ pipeline {
                         dir('/var/lib/jenkins/workspace/virtual browser/.docker/firefox') {
                             
                             sh '''
-                                whereis docker
-                                whoami
-                                chmod 666 /var/run/docker.sock
                                 docker build -t 007devopsimages/vb:latest . '''
                             // Removed duplicate push command here
                         }
