@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+environment{
+    Scanner_Home = tool(sonarScanner)
+}
+    stages {
+
+        // btw parathesis bracket we git stage a name
+        stage('vulnerability check') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableNodeAudit', odcInstallation: 'DP',
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('sonarqube') {
+            steps {
+                withSonarQubeEnv("sonarServer") {
+ sh ''' $Scanner_Home/bin/sonarScanner -Dsonar.projectKey=VirtualBrowser \
+ -Dsonar.projectName=VirtualBrowser '''
+ }
+            }
+        }
+        stage('Docker stage') {
+            steps {
+               script{
+                withDockerRegistry(credentialsId: 'docker_user' , toolName: 'Docker') {
+    // some block
+}
+               }
+            }
+        }
+    }
+}
