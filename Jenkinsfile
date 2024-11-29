@@ -27,6 +27,9 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker_user', toolName: 'docker') {  // No need for 'url' here for Docker Hub
                         dir('/var/lib/jenkins/workspace/virtual browser/.docker/firefox') {
+                            sh "whereis docker \
+                            whoami \
+                            chmod 666 /var/run/docker.sock"
                             sh 'docker build -t 007devopsimages/VB:latest .'
                             // Removed duplicate push command here
                         }
