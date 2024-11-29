@@ -51,13 +51,13 @@ pipeline {
         }
 
         stage("trivy scan"){
-            step{
+            steps{
                 sh "trivy image 007devopsimages/VB:latest >> trivy.txt"
             }
         }
 
         stage("dicker push"){
-            step{
+            steps{
                 withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {
                     sh "docker push 007devopsimages/VB:latest"
                }
