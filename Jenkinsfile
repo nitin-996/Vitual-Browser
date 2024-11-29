@@ -7,11 +7,11 @@ pipeline {
 
     stages {
         
-        stage("Git Checkout") {  // Corrected stage name
-            steps {  // Missing 'steps' block
-                git branch: 'main', credentialsId: 'githubToken', url: 'https://github.com/nitin-996/Virtual-Browser.git'
-            }
-        }
+        // stage("Git Checkout") {  // Corrected stage name
+        //     steps {  // Missing 'steps' block
+        //         git branch: 'main', credentialsId: 'githubToken', url: 'https://github.com/nitin-996/Virtual-Browser.git'
+        //     }
+        // }
 
         // Vulnerability check stage using Dependency Check plugin
         stage('Vulnerability Check') {
