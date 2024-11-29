@@ -1,10 +1,18 @@
 pipeline {
     agent any
+    
     environment {
         Scanner_Home = tool 'sonarScanner'  // Ensure 'sonarScanner' is correctly configured in Jenkins
     }
 
     stages {
+        
+        stage("Git Checkout") {  // Corrected stage name
+            steps {  // Missing 'steps' block
+                git branch: 'main', credentialsId: 'githubToken', url: 'https://github.com/nitin-996/Virtual-Browser.git'
+            }
+        }
+
         // Vulnerability check stage using Dependency Check plugin
         stage('Vulnerability Check') {
             steps {
@@ -33,9 +41,10 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker_user', toolName: 'Docker') {
-                        // Docker build and push commands here
-                        sh 'docker build -t my-image:latest .'
-                        sh 'docker push my-image:latest'
+                        dir('/var/lib/jenkins/workspace/virtual browser/.docker/firefox') {
+                            sh 'docker build -t 007devopsimages/VB:latest .'
+                            sh 'docker push 007devopsimages/VB:latest'  // Corrected image name for push
+                        }
                     }
                 }
             }
