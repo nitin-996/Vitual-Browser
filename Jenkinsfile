@@ -25,7 +25,7 @@ pipeline {
         stage('Docker build') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker_user') {  // No need for 'url' here for Docker Hub
+                    withDockerRegistry(credentialsId: 'docker_user', toolName: 'docker') {  // No need for 'url' here for Docker Hub
                         dir('/var/lib/jenkins/workspace/virtual browser/.docker/firefox') {
                             sh 'docker build -t 007devopsimages/VB:latest .'
                             // Removed duplicate push command here
