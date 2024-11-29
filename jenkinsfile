@@ -1,8 +1,7 @@
 pipeline {
     agent any
-
     environment {
-        Scanner_Home = tool('sonarScanner')  // Ensure 'sonarScanner' is correctly configured in Jenkins
+        Scanner_Home = tool 'sonarScanner'  // Ensure 'sonarScanner' is correctly configured in Jenkins
     }
 
     stages {
