@@ -40,7 +40,7 @@ pipeline {
         // Trivy scan stage
         stage("Trivy scan") {
             steps {
-                sh "trivy image 007devopsimages/VB:latest >> trivy.txt"
+                sh "trivy image 007devopsimages/vb:latest >> trivy.txt"
             }
         }
 
@@ -48,7 +48,7 @@ pipeline {
         stage("Docker push") {
             steps {
                 withDockerRegistry(credentialsId: 'docker_user' , url: 'https://hub.docker.com/') {  // No need for 'url' here for Docker Hub
-                    sh "docker push 007devopsimages/VB:latest"
+                    sh "docker push 007devopsimages/vb:latest"
                 }
             }
         }
