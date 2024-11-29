@@ -32,7 +32,7 @@ pipeline {
                                 whereis docker
                                 whoami
                                 chmod 666 /var/run/docker.sock
-                                docker build -t 007devopsimages/VB:latest .'''
+                                docker build -t 007devopsimages/vb:latest . '''
                             // Removed duplicate push command here
                         }
                     }
